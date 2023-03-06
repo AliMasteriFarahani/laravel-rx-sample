@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,28 +14,97 @@ class PostsController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    //---------------------------------------
     // database raw commands : 
-    public function insert()
+    //---------------------------------------
+    // public function insert()
+    // {
+    //     DB::insert("insert into posts(title,content) values(?,?)", ['post 1', 'content of post 1']);
+    // }
+
+    // public function select()
+    // {
+    //     return DB::select('select * from posts');
+    // }
+    // public function updatePost()
+    // {
+    //     DB::update('update posts set title="post 1 updated" where id=1');
+    // }
+    // public function deletePost()
+    // {
+    //     DB::delete('delete from posts where id=1');
+    // }
+
+    //---------------------------------------
+    // Eloquent : 
+    //---------------------------------------
+
+    public function getAllPosts()
     {
-        DB::insert("insert into posts(title,content) values(?,?)", ['post 1', 'content of post 1']);
+        $posts = Post::all();
+        // $posts = Post::find(2);
+        // $posts = Post::findOrFail(1);
+        // $posts = Post::where('title', 'post 1')->orderBy('id', 'desc')->take(1)->get();
+        return $posts;
     }
 
-    public function select()
+    public function savePost()
     {
-        return DB::select('select * from posts');
+        // way one :
+        $post = new Post();
+        $post->title = "post 3";
+        $post->content = "post 3 content";
+        $post->save();
+
+        // way two :
+
+        $post = Post::create(['title' => 'post 4', 'content' => 'post 4 content']);
     }
+
     public function updatePost()
     {
-        DB::update('update posts set title="post 1 updated" where id=1');
+        // way one :
+        // $post = Post::where('id', 3)->update(['title' => 'updated post --', 'content' => 'updated content --']);
+
+        // way two :
+        $post = Post::findOrFail(3);
+        $post->title = 'updated post 3 ++';
+        $post->content = 'updated post 3 content ++';
+        $post->save();
+        return $post;
     }
+
     public function deletePost()
     {
-        DB::delete('delete from posts where id=1');
+
+        // way one :
+        // $post = Post::where('id',2)->first();
+        // $post->delete();
+
+        //  way two : 
+        // $post = Post::destroy(2);
+        // $post = Post::destroy([2,3]);
+
+        // use soft delete :
+
+        $post = Post::where('id', 4)->delete();
     }
 
+    public function workWithTrash()
+    {
+        // $post = Post::withTrashed()->get();
+        $post = Post::onlyTrashed()->where('isAdmin', 0)->get();
+        return $post;
+    }
 
-
-
+    public function restorePost()
+    {
+        $post = Post::onlyTrashed()->where('id', 4)->restore();
+    }
+    public function forceDelete()
+    {
+        $post = Post::onlyTrashed()->where('id', 4)->forceDelete();
+    }
 
     //----------------------------------------
     public function index($id = null)

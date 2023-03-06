@@ -1,0 +1,126 @@
+composer create-project --prefer-dist laravel/laravel blog "5.7.*"
+
+
+// start mysql : 
+
+sudo /opt/lammp/lammp start
+
+
+
+php artisan route:list (-V) version
+php artisan route:clear
+php artisan route:cache
+===================================
+php artisan make:controller PostsController
+
+php artisan make:controller PostsController --resources
+
+php artisan config:clear
+
+
+php artisan migrate
+
+//=================================
+
+composer require doctrine/dbal  --> for change on columns
+
+
+
+
+
+
+
+php artisan migrate:fresh --> delete database datas
+php artisan migrate:rollback --step=5
+php artisan migrate:reset
+
+
+php artisan make:migration create_post_table --create="posts"
+php artisan make:migration add_is_admin_to_posts --table="posts" 
+
+
+php artisan cache
+php artisan cache:clear
+php artisan config:cache
+
+
+php artisan storage:link
+
+php artisan make:auth 
+
+
+php artisan make:middleware isAdmin
+
+
+composer require "laravelcollective/html":"5.7.1"
+
+
+ACL :
+
+Gate :: (work only on controllers)
+
+Providers / AuthServiceProvider  /// boot
+k,pi 
+
+
+Policy : ( work on controllers and views )
+
+php artisan make:policy PostPloicy --model=posts
+
+Providers / AuthServiceProvider // plicices --> add policy  :
+
+
+
+
+---------------------------------------------
+Event and Listeners : 
+------------------------
+
+app / providers / event service provides  :
+
+php artisan event:generate
+
+queue :
+
+add impliments ShouldQueue in event and listener
+
+php artisan queue:table
+
+then ...
+php artisan migrate
+
+php artisan queue:failed-table
+then ...
+php artisan migrate
+
+real server supervisor should be install 
+
+php artisan queue:work --timeout=60
+
+
+npm run dev
+
+
+
+composer require hekmatinasser/verta
+
+
+chegvara_shop
+
+
+composer.json {
+
+"autoload":{
+"files":[
+   "app/Healpers/helper.php"
+]
+}
+
+}
+
+composer dump-autoload
+
+
+
+
+
